@@ -1,0 +1,26 @@
+const Parcelas = sequelize.define('parcelas', {
+  id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+  nombre_recinto: { type: Sequelize.STRING, allowNull: false },
+  pac_ano: { type: Sequelize.STRING, allowNull: false },
+  pac_nombre: { type: Sequelize.STRING, allowNull: false },
+  pac_nif: { type: Sequelize.STRING, allowNull: false },
+  
+  sigpac_provincia: { type: Sequelize.STRING, allowNull: false },
+  sigpac_municipio: { type: Sequelize.STRING, allowNull: false },
+  sigpcac_agredado: { type: Sequelize.STRING, allowNull: false },
+  sigppac_zona: { type: Sequelize.STRING, allowNull: false },
+  sigpac_poligono: { type: Sequelize.STRING, allowNull: false },
+  sigpac_parcela: { type: Sequelize.STRING, allowNull: false },
+  sigpac_recinto: { type: Sequelize.STRING, allowNull: false },
+  sigpac_uso: { type: Sequelize.STRING, allowNull: false },
+  sigpac_hatotales: { type: Sequelize.STRING, allowNull: false },
+  sigpac_hadeclaradas: { type: Sequelize.STRING, allowNull: false },
+  
+  cultivo: { type: Sequelize.STRING, allowNull: false },
+  variedad: { type: Sequelize.STRING, allowNull: false },
+  zonaespecifica: { type: Sequelize.STRING, allowNull: false },
+  zonavulnerable: { type: Sequelize.STRING, allowNull: false },
+  cultivopermanente: { type: Sequelize.STRING, allowNull: false },
+  sistemacertificacion: { type: Sequelize.STRING, allowNull: false },
+  secano_regadio: { type: Sequelize.STRING, allowNull: false }
+})

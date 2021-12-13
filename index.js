@@ -1,14 +1,11 @@
 var express = require('express');
 var app = express();
-var explotaciones = require('./explotaciones');
 const Sequelize = require('sequelize')
 
 
 app.use(express.json());
-
-// Iniciar servidor
 app.listen(5000);
-console.log('¡Servidor iniciado en el puerto 5000!');
+console.log('¡Server Started in Port 5000!');
 
 // Database Options
 const user = 'postgres'
@@ -36,7 +33,7 @@ sequelize
 
 
 
-// Modelos
+// Models to include things in the database (PostgreSQL Local)
 
 const Personas = sequelize.define('personas', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
@@ -86,34 +83,6 @@ const Actividad = sequelize.define('actividad', {
   maquinaria: { type: Sequelize.STRING, allowNull: true },
 });
 
-
-// const Parcelas = sequelize.define('parcelas', {
-//   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
-//   nombre_recinto: { type: Sequelize.STRING, allowNull: false },
-//   pac_ano: { type: Sequelize.STRING, allowNull: false },
-//   pac_nombre: { type: Sequelize.STRING, allowNull: false },
-//   pac_nif: { type: Sequelize.STRING, allowNull: false },
-  
-//   sigpac_provincia: { type: Sequelize.STRING, allowNull: false },
-//   sigpac_municipio: { type: Sequelize.STRING, allowNull: false },
-//   sigpcac_agredado: { type: Sequelize.STRING, allowNull: false },
-//   sigppac_zona: { type: Sequelize.STRING, allowNull: false },
-//   sigpac_poligono: { type: Sequelize.STRING, allowNull: false },
-//   sigpac_parcela: { type: Sequelize.STRING, allowNull: false },
-//   sigpac_recinto: { type: Sequelize.STRING, allowNull: false },
-//   sigpac_uso: { type: Sequelize.STRING, allowNull: false },
-//   sigpac_hatotales: { type: Sequelize.STRING, allowNull: false },
-//   sigpac_hadeclaradas: { type: Sequelize.STRING, allowNull: false },
-  
-//   cultivo: { type: Sequelize.STRING, allowNull: false },
-//   variedad: { type: Sequelize.STRING, allowNull: false },
-//   zonaespecifica: { type: Sequelize.STRING, allowNull: false },
-//   zonavulnerable: { type: Sequelize.STRING, allowNull: false },
-//   cultivopermanente: { type: Sequelize.STRING, allowNull: false },
-//   sistemacertificacion: { type: Sequelize.STRING, allowNull: false },
-//   secano_regadio: { type: Sequelize.STRING, allowNull: false }
-// })
-
 const Parcelas = sequelize.define('parcelas', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
   nombre: { type: Sequelize.STRING, allowNull: false },
@@ -126,7 +95,7 @@ const Parcelas = sequelize.define('parcelas', {
 
 
 
-// Put tables into the database
+// Whith .sync() -> create the tables in the database
 
 Personas.sync()
 Maquinaria.sync()
@@ -135,6 +104,8 @@ Actividad.sync()
 Parcelas.sync()
 
 
+// ------- ***** ------------- ******
+//  The endpoints of the api
 // ------- ***** ------------- ******
 
 
@@ -284,20 +255,3 @@ app.delete('/parcelas/:id', (req, res) => {
     res.sendStatus(500)
   })
 })
-
-// // Edit parcelas by id with query params
-// app.put('/parcelas/:id', (req, res) => {
-//   Parcelas.update({
-//     nombre: req.body.nombre,
-//     superficie: req.body.superficie,
-//     cultivos: req.body.cultivos,
-//     grupos: req.body.grupos,
-//     recintos: req.body.recintos
-//   },{
-//     where: {
-//       id: req.params.id
-//     }
-//   }).then(parcelas => {
-//     res.send(parcelas)
-//   })
-// })
