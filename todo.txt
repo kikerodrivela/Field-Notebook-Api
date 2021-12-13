@@ -1,0 +1,175 @@
+// Explotacion Model
+const Explotacion = sequelize.define('explotacion', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  nombre: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  nif: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  direccion: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  codigopostal: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  provincia: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  telefono: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  regexnacional: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  regexautonimico: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  }
+})
+
+Explotacion.sync()
+
+// *-*-*-------------------------------------*-*-*
+// *-*-*-------------------------------------*-*-*
+// *-*-*-------------------------------------*-*-*
+
+
+
+users = [] // Personal
+maquinaria = [] // Maquinaria
+products = [] // Products
+almacenes = [] // Almacenes
+productosalmacenes = [] // Productos en almacenes
+actividades = [] // Actividades
+personalproductos = [] // Personal en productos
+
+app.get('/', function (req, res) {
+  res.send('I´ts Work!');
+});
+
+// USUARIOS
+// Para agregar un usuarios a la lista
+
+app.post('/personal', function (request, response) {
+  response.sendStatus(200);
+  users.push(request.body);
+});
+
+// // Para ver los usuarios de la lista
+
+app.get('/personal', function (request, response) {
+  response.send(users);
+});
+
+
+// --------------------------------------------------------------
+// MAQUINARIA
+// Para agregar una maquinaria a la lista
+
+app.post('/maquinaria', function (request, response) {
+  response.sendStatus(200);
+  maquinaria.push(request.body);
+});
+
+// Para ver las maquinarias de la lista
+
+app.get('/maquinaria', function (request, response) {
+  response.send(maquinaria);
+});
+
+// --------------------------------------------------------------
+// PRODUCTOS
+
+// Para agregar un producto a la lista
+app.post('/productos', function (request, response) {
+  response.sendStatus(200);
+  products.push(request.body);
+});
+
+// Para ver los productos de la lista
+app.get('/productos', function (request, response) {
+  response.send(products);
+});
+
+// Personal que trata con los productos
+app.post('/productos/personal', function (request, response) {
+  response.sendStatus(200);
+  personalproductos.push(request.body);
+  console.log(personalproductos);
+});
+
+app.get('/productos/personal', function (request, response) {
+  response.send(personalproductos);
+});
+
+
+
+
+// --------------------------------------------------------------
+// ALMACENES
+
+// Para agregar un almacen a la lista
+app.post('/almacen', function (request, response) {
+  response.sendStatus(200);
+  almacenes.push(request.body);
+});
+
+// Para ver los almacenes de la lista
+app.get('/almacen', function (request, response) {
+  response.send(almacenes);
+});
+
+// *-*-*-------------------------------------*-*-*
+
+// Para guardar los productos en el almacen
+app.post('/almacenproductos', function (request, response) {
+  response.sendStatus(200);
+  productosalmacenes.push(request.body);
+});
+
+// Para ver los productos en el almacen
+app.get('/almacenproductos', function (request, response) {
+  response.send(productosalmacenes);
+});
+
+
+// --------------------------------------------------------------
+// ACTIVIDADES
+
+// Para agregar una actividad a la lista
+app.post('/actividades', function (request, response) {
+  response.sendStatus(200);
+  actividades.push(request.body);
+});
+
+// Para ver las actividades de la lista
+
+app.get('/actividades', function (request, response) {
+  response.send(actividades);
+});
+
+
+// --------------------------------------------------------------
+// Explotaciones
+
+// Para ver las explotaciones de la lista
+app.get('/explotaciones', function (request, response) {
+  response.send(explotaciones);
+})
+
+
+
+app.listen(5000);
+console.log('¡Servidor iniciado en el puerto 5000!');
