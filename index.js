@@ -115,15 +115,24 @@ const Almacen = sequelize.define('almacen', {
   direccion: { type: Sequelize.STRING, allowNull: false }
 })
 
+const AlmacenProductos = sequelize.define('productosalmacen', {
+  id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+  producto: { type: Sequelize.STRING, allowNull: false },
+  cantidad: { type: Sequelize.STRING, allowNull: false },
+  almacen: { type: Sequelize.STRING, allowNull: false }
+})
+
+
 // Whith .sync() -> create the tables in the database
 
 Personas.sync()
-Maquinaria.sync()
-Producto.sync()
+Maquinaria.sync() -
+  Producto.sync()
 Actividad.sync()
 Parcelas.sync()
 Datos.sync()
 Almacen.sync()
+AlmacenProductos.sync()
 
 
 // ------- ***** ------------- ******
@@ -328,6 +337,40 @@ app.get('/almacen', (req, res) => {
     res.send(almacen)
   })
 })
+
+// Get almacen by id
+app.get('/almacen/:id', (req, res) => {
+  Almacen.findAll({
+    where: {
+      id: req.params.id
+    }
+  }).then(almacen => {
+    if (!almacen) {
+      res.send("No existe el almacen")
+    } else {
+      res.send(almacen)
+    }
+  })
+})
+
+app.post('/almacenproductos', (req, res) => {
+  const almacenproductos = {
+    almacen: req.body.almacen,
+    producto: req.body.producto,
+    cantidad: req.body.cantidad,
+  }
+  AlmacenProductos.create(almacenproductos).then(almacenproductos => {
+    res.send(almacenproductos)
+  }
+  )
+})
+
+app.get('/almacenproductos', (req, res) => {
+  AlmacenProductos.findAll().then(almacenproductos => {
+    res.send(almacenproductos)
+  })
+})
+
 
 // ------- ***** ------------- ******
 
