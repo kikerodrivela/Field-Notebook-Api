@@ -76,7 +76,7 @@ const Actividad = sequelize.define('actividad', {
   numexplotacion: { type: Sequelize.INTEGER, allowNull: true },
   parcela: { type: Sequelize.STRING, allowNull: true },
   cultivo: { type: Sequelize.STRING, allowNull: true },
-  capana: { type: Sequelize.STRING, allowNull: true },
+  campana: { type: Sequelize.STRING, allowNull: true },
   producto: { type: Sequelize.STRING, allowNull: true },
   cantidad: { type: Sequelize.STRING, allowNull: true },
   personal: { type: Sequelize.STRING, allowNull: true },
@@ -93,7 +93,27 @@ const Parcelas = sequelize.define('parcelas', {
 })
 
 
+const Datos = sequelize.define('datos', {
+  id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+  nombre: { type: Sequelize.STRING, allowNull: false },
+  apellido1: { type: Sequelize.STRING, allowNull: false },
+  apellido2: { type: Sequelize.STRING, allowNull: false },
+  razonsocial: { type: Sequelize.STRING, allowNull: false },
+  dni: { type: Sequelize.STRING, allowNull: false },
+  direccion: { type: Sequelize.STRING, allowNull: false },
+  poblacion: { type: Sequelize.STRING, allowNull: false },
+  telefono: { type: Sequelize.STRING, allowNull: false },
+  correo: { type: Sequelize.STRING, allowNull: false },
+  localizacion: { type: Sequelize.STRING, allowNull: false },
+  codigoexplotacion: { type: Sequelize.STRING, allowNull: false },
+  carnet: { type: Sequelize.STRING, allowNull: false },
+})
 
+const Almacen = sequelize.define('almacen', {
+  id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+  nombre: { type: Sequelize.STRING, allowNull: false },
+  direccion: { type: Sequelize.STRING, allowNull: false }
+})
 
 // Whith .sync() -> create the tables in the database
 
@@ -102,6 +122,8 @@ Maquinaria.sync()
 Producto.sync()
 Actividad.sync()
 Parcelas.sync()
+Datos.sync()
+Almacen.sync()
 
 
 // ------- ***** ------------- ******
@@ -195,10 +217,11 @@ app.post('/actividades', (req, res) => {
     dateend: req.body.dateend,
     tiempo: req.body.tiempo,
     nombre: req.body.nombre,
-    numeroExplotacion: req.body.numeroExplotacion,
+    numexplotacion: req.body.numexplotacion,
+    trabajo: req.body.trabajo,
     parcela: req.body.parcela,
     cultivo: req.body.cultivo,
-    camapa: req.body.camapa,
+    campana: req.body.campana,
     producto: req.body.producto,
     cantidad: req.body.cantidad,
     personal: req.body.personal,
@@ -227,7 +250,8 @@ app.post('/parcelas', (req, res) => {
 
 app.get('/parcelas', (req, res) => {
   Parcelas.findAll().then(parcelas => {
-    res.send(parcelas)})
+    res.send(parcelas)
+  })
 })
 
 app.get('/parcelas/:id', (req, res) => {
@@ -236,10 +260,10 @@ app.get('/parcelas/:id', (req, res) => {
       id: req.params.id
     }
   }).then(parcelas => {
-    if(! parcelas) {
+    if (!parcelas) {
       res.send("No existe la parcela")
-    }else {
-    res.send(parcelas)
+    } else {
+      res.send(parcelas)
     }
   })
 })
@@ -254,4 +278,123 @@ app.delete('/parcelas/:id', (req, res) => {
   }).catch(() => {
     res.sendStatus(500)
   })
+})
+
+
+app.post('/datos', (req, res) => {
+
+  const datos = {
+    nombre: req.body.nombre,
+    apellido1: req.body.apellido1,
+    apellido2: req.body.apellido2,
+    dni: req.body.dni,
+    razonsocial: req.body.razonsocial,
+    dni: req.body.dni,
+    direccion: req.body.direccion,
+    poblacion: req.body.poblacion,
+    telefono: req.body.telefono,
+    correo: req.body.correo,
+    localizacion: req.body.localizacion,
+    codigoexplotacion: req.body.codigoexplotacion,
+    carnet: req.body.carnet
+  }
+
+  Datos.create(datos).then(datos => {
+    res.send(datos)
+  })
+
+})
+
+app.get('/datos', (req, res) => {
+  Datos.findAll().then(datos => {
+    res.send(datos)
+  })
+})
+
+
+app.post('/almacen', (req, res) => {
+  const almacen = {
+    nombre: req.body.nombre,
+    direccion: req.body.direccion,
+  }
+  Almacen.create(almacen).then(almacen => {
+    res.send(almacen)
+  })
+
+})
+
+app.get('/almacen', (req, res) => {
+  Almacen.findAll().then(almacen => {
+    res.send(almacen)
+  })
+})
+
+// ------- ***** ------------- ******
+
+
+trabajos = [
+  {
+    id: 1,
+    name: "Abonar",
+  },
+  {
+    id: 2,
+    name: "Cosechar o Recolectar",
+  },
+  {
+    id: 3,
+    name: "Otros Trabajos",
+  },
+  {
+    id: 4,
+    name: "Otros trabajos de cultivo",
+  },
+  {
+    id: 5,
+    name: "Poda de Fructificación",
+  },
+  {
+    id: 6,
+    name: "Poda de Producción",
+  },
+  {
+    id: 7,
+    name: "Poda en Verde",
+  },
+  {
+    id: 8,
+    name: "Preparar el terreno",
+  },
+  {
+    id: 9,
+    name: "Sembrar o Plantar",
+  },
+  {
+    id: 10,
+    name: "Tratamiento Fitosanitario",
+  },
+  {
+    id: 11,
+    name: "Tratamiento Fitosanitario a almacén",
+  },
+  {
+    id: 12,
+    name: "Tratamiento Fitosanitario a medio de transporte",
+  },
+  {
+    id: 13,
+    name: "Tratamiento fitosanitario a postcosecha",
+  },
+  {
+    id: 14,
+    name: "Tratamiento Fitosanitario a semilla",
+  },
+  {
+    id: 15,
+    name: "Tratamiento no quimico",
+  },
+]
+
+app.get('/trabajos', (req, res) => {
+  res.send(trabajos)
 })
