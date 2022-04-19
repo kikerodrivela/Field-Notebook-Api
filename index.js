@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express();
 const Sequelize = require("sequelize");
+var moment = require("moment"); // require
 
 app.use(express.json());
 app.listen(5000);
@@ -60,6 +61,7 @@ const Producto = sequelize.define("producto", {
   nombre: { type: Sequelize.STRING, allowNull: false },
   concentracion: { type: Sequelize.STRING, allowNull: false },
   cantidad: { type: Sequelize.STRING, allowNull: false },
+  almacen: { type: Sequelize.STRING, allowNull: false },
 });
 
 const Actividad = sequelize.define("actividad", {
@@ -189,12 +191,12 @@ trabajos = [
 // Whith .sync() -> create the tables in the database
 
 Personas.sync();
-Maquinaria.sync() - Producto.sync();
+Maquinaria.sync();
+Producto.sync();
 Actividad.sync();
 Parcelas.sync();
 Datos.sync();
 Almacen.sync();
-AlmacenProductos.sync();
 Trabajos.sync();
 
 // ------- ***** ------------- ******
@@ -344,6 +346,7 @@ app.post("/productos", (req, res) => {
     nombre: req.body.nombre,
     concentracion: req.body.concentracion,
     cantidad: req.body.cantidad,
+    almacen: req.body.almacen,
   };
 
   Producto.create(producto).then((producto) => {
@@ -398,17 +401,6 @@ app.post("/almacen", (req, res) => {
   });
 });
 
-app.post("/almacenproductos", (req, res) => {
-  const almacenproductos = {
-    almacen: req.body.almacen,
-    producto: req.body.producto,
-    cantidad: req.body.cantidad,
-  };
-  AlmacenProductos.create(almacenproductos).then((almacenproductos) => {
-    res.send(almacenproductos);
-  });
-});
-
 app.post("/datos", (req, res) => {
   const datos = {
     nombre: req.body.nombre,
@@ -416,7 +408,6 @@ app.post("/datos", (req, res) => {
     apellido2: req.body.apellido2,
     dni: req.body.dni,
     razonsocial: req.body.razonsocial,
-    dni: req.body.dni,
     direccion: req.body.direccion,
     poblacion: req.body.poblacion,
     telefono: req.body.telefono,
@@ -704,5 +695,70 @@ app.put("/almacen/:id", (req, res) => {
     })
     .catch(() => {
       res.sendStatus(500);
+    });
+});
+
+//------ ****** ------------ ******
+// TEST ENDPOINTS
+// -------- ****** ------------ ******
+
+app.post("/fechas/:date1/:date2", (req, res) => {
+  const date1 = req.params.date1;
+  const date2 = req.params.date2;
+
+  const formatdate01 = moment(date1, "YYYY-MM-DD").format("YYYY-MM-DD");
+  const formatdate02 = moment(date2, "YYYY-MM-DD").format("YYYY-MM-DD");
+
+  // const query = `SELECT * FROM actividads WHERE datestart BETWEEN '${formatdate01}' AND '${formatdate02}'`;
+
+  // sequelize
+  //   .query(query, {
+  //     type: sequelize.QueryTypes.SELECT,
+  //   })
+  //   .then((actividades, personal, maquinaria) => {
+  //     res.send(actividades, personal, maquinaria);
+  //   })
+  //   .catch((err) => {
+  //     res.send(err);
+  //   });
+
+  // If the data are correct send a console log message
+  // and send a response with a status code 200
+
+  // If the data are incorrect send a console log message
+  // and send a response with a status code 500
+
+  if (formatdate01 && formatdate02) {
+    console.log(`The dates are correct: ${formatdate01} and ${formatdate02}`);
+    res.sendStatus(200);
+  } else {
+    console.log(`The dates are incorrect: ${formatdate01} and ${formatdate02}`);
+    res.sendStatus(500);
+  }
+});
+
+app.get("/fechas/:date1/:date2", (req, res) => {
+  const date1 = req.params.date1;
+  const date2 = req.params.date2;
+
+  const formatdate01 = moment(date1, "YYYY-MM-DD").format("YYYY-MM-DD");
+  const formatdate02 = moment(date2, "YYYY-MM-DD").format("YYYY-MM-DD");
+
+  console.log("The dates are: ", formatdate01, formatdate02);
+
+
+  const query_actividades = `SELECT * FROM actividads WHERE datestart BETWEEN '${formatdate01}' AND '${formatdate02}'`;
+  // const query_personal = `SELECT * FROM personals WHERE datestart BETWEEN '${formatdate01}' AND '${formatdate02}'`;
+
+
+  sequelize
+    .query(query_actividades,  {
+      type: sequelize.QueryTypes.SELECT,
+    })
+    .then((actividades, personal, maquinaria) => {
+      res.send(actividades, personal, maquinaria);
+    })
+    .catch((err) => {
+      res.send(err);
     });
 });
